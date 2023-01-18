@@ -29,10 +29,9 @@ def run_query(query):
     print ('running query')
     response = requests.post('https://api.tarkov.dev/graphql', json={'query': query})
     if response.status_code == 200:
-        parse_json = response.json()
-        res = parse_json['data']['items'][0]['avg24hPrice']
-        print(res)
-        return res
+        print (response.json)
+        return response.json()
+    
     else:
         raise Exception("Query failed to run by returning code of {}. {}".format(response.status_code, query))
 
@@ -75,26 +74,24 @@ async def send_receive():
                if stop_event.is_set():
                    break
                try:
+
                    result_str = await _ws.recv()
-                   print(json.loads(result_str)['text'])    
-                   new_query = """
+                   print(json.loads(result_str)['text'])
+                   new_query = '''
                     {
                         items(name: "%s") {
                             avg24hPrice
                         }
-                    }""" % result_str
-                    
-            
+                    }
+                    ''' % result_str
+
                except websockets.exceptions.ConnectionClosedError as e:
                    print(e)
                    assert e.code == 4008
                    break
                except Exception as e:
                    assert False, "Not a websocket 4008 error"
-               print(run_query(new_query))
-               # print the avg 24 hr price here
-               
-               
+
        send_result, receive_result = await asyncio.gather(send(), receive())
 
 async def background_task():
@@ -106,6 +103,3 @@ while True:
     if keyboard.is_pressed('capslock'):
         asyncio.run(background_task())
     time.sleep(0.1)
-
-
-
