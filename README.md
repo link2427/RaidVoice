@@ -1,8 +1,4 @@
 # RaidVoice
-
-pornhub.com/gay
-
-oops wait this isnt google
  
 RaidVoice
 RaidVoice is a Python program that helps you quickly find out the price of an item at the flea market or trader when playing Escape from Tarkov. Simply press the user-assigned hotkey while in-game, speak the name of the item, and RaidVoice will use text-to-speech to tell you the current market price.
