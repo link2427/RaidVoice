@@ -1,11 +1,30 @@
 import json
-import keyboard
 import requests
-import speech_recognition as sr
 
-v_Recognition = ""
+import pip
+try:
+    import keyboard
+    import speech_recognition as sr
+    import pyttsx3
+except ImportError:
+    pip.main(['install', 'keyboard'])
+    pip.main(['install', 'speech_recognition'])
+    pip.main(['install', 'pyttsx3'])
+    import keyboard
+    import speech_recognition as sr
+    import pyttsx3
+
+v_Recognition = ""  
 
 r = sr.Recognizer()
+ttsEngine = pyttsx3.init()
+
+def sayPrice(name, price):
+    voiceLine = 'The price of %s is %.0f'%(name, price)
+
+    print('voiceLine')
+    ttsEngine.say(voiceLine)
+    ttsEngine.runAndWait()
 
 while True:
     if keyboard.is_pressed('caps lock'):
@@ -25,18 +44,28 @@ while True:
             if response.status_code == 200:
                 data = response.text
                 parse_json = json.loads(data)
+                
+                if len(parse_json['data']['items']) == 0:
+                    ttsEngine.say('Item not found')
+                    ttsEngine.runAndWait()
+                    return
+
                 items = parse_json['data']['items'][0]
-                avg24hPrice = parse_json['data']['items'][0]['avg24hPrice']
-                basePrice = parse_json['data']['items'][0]['basePrice'] 
-                name = parse_json['data']['items'][0]['name']
+                
+                avg24hPrice = items['avg24hPrice']
+                basePrice = items['basePrice']
+                name = items['name']
                 
                 if avg24hPrice == 0:
-                    print(basePrice)
+                    sayPrice(name, basePrice)
                 else:
-                    print(avg24hPrice)
+                    if avg24hPrice < basePrice:
+                        sayPrice(name, basePrice)
+                    else:
+                        sayPrice(name, avg24hPrice)
                 
                 
-                #print(response.json())
+
                 return response.json()
             
             else:
