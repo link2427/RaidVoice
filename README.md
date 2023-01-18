@@ -14,6 +14,7 @@ RaidVoice is a Python program that helps you quickly find out the price of an it
 
 # Installation
 1. Run main, which will install all required libraries for you on initial startup.
+2. Or run the packaged executable, which does not require any other steps.
 
 # License
 RaidVoice is licensed under the GPL-3.0 license. Feel free to use, modify, and distribute the code as you see fit.
